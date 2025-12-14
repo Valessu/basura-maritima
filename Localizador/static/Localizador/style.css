@@ -1,0 +1,6 @@
+body { font-family: Arial; margin: 40px; }
+h1 { color: #005f73; }
+table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+th { background-color: #e0f7fa; }
+.btn { background: #0077b6; color: white; padding: 8px; text-decoration: none; border-radius: 5px; }

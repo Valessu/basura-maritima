@@ -1,0 +1,110 @@
+{% extends 'localizador/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block contenido %}
+<div class="container my-5 d-flex justify-content-center">
+
+    <div class="card shadow-lg p-4 rounded"
+         style="max-width: 600px; width: 100%; background-color: #f0faff; border: none;">
+
+        <!-- Logo -->
+        <div class="text-center mb-4">
+            <img src="{% static 'Localizador/logo.png' %}" alt="Logo" width="180">
+        </div>
+
+        <h2 class="text-center mb-4" style="color: #00395d; font-weight: 700;">
+            {% if form.instance.pk %}
+                <i class="bi bi-pencil-square"></i> Editar Zona
+            {% else %}
+                <i class="bi bi-plus-circle"></i> Agregar Zona
+            {% endif %}
+        </h2>
+
+        <form method="post">
+            {% csrf_token %}
+
+            {% for field in form %}
+                <div class="mb-3">
+                    <label for="{{ field.id_for_label }}" class="form-label">
+                        {{ field.label }}
+                    </label>
+
+                    {{ field|add_class:"form-control" }}
+
+                    {% if field.errors %}
+                        <div class="text-danger mt-1">{{ field.errors }}</div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            <hr>
+
+            <!-- MAPA -->
+            <h5 class="text-center mt-4">Ubicación en el mapa</h5>
+            <div id="map"
+                 style="height: 300px; border-radius: 8px; margin-bottom: 20px;">
+            </div>
+
+            <div class="d-flex gap-2 mt-4 justify-content-center">
+                <button type="submit" class="btn btn-success px-4">
+                    <i class="bi bi-check-circle"></i> Guardar
+                </button>
+
+                <a href="{% url 'listar_zonas' %}" class="btn btn-secondary px-4">
+                    <i class="bi bi-arrow-left-circle"></i> Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Leaflet -->
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+    const latInput = document.getElementById("id_latitud");
+    const lngInput = document.getElementById("id_longitud");
+
+    const initialLat = latInput.value || -33.45;
+    const initialLng = lngInput.value || -70.66;
+
+    const map = L.map('map').setView([initialLat, initialLng], 6);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap'
+    }).addTo(map);
+
+    let marker = null;
+
+    if (latInput.value && lngInput.value) {
+        marker = L.marker([initialLat, initialLng]).addTo(map);
+    }
+
+    map.on('click', function (e) {
+        const lat = e.latlng.lat.toFixed(6);
+        const lng = e.latlng.lng.toFixed(6);
+
+        latInput.value = lat;
+        lngInput.value = lng;
+
+        if (marker) {
+            marker.setLatLng(e.latlng);
+        } else {
+            marker = L.marker(e.latlng).addTo(map);
+        }
+    });
+</script>
+
+<style>
+    #id_latitud,
+    #id_longitud {
+        background-color: #e9ecef;
+    }
+</style>
+
+{% endblock %}

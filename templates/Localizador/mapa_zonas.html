@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Mapa de Zonas de Basura</h2>
+
+<div id="map" style="height: 500px;"></div>
+
+<!-- Leaflet -->
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+    const map = L.map('map').setView([-33.45, -70.66], 6); // Chile
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap'
+    }).addTo(map);
+
+    fetch('/api/zonas/')
+        .then(response => response.json())
+        .then(data => {
+            data.forEach(zona => {
+                let popup = `
+                    <b>${zona.nombre}</b><br>
+                    ${zona.descripcion || ''}<br>
+                    <b>Tipo:</b> ${zona.tipo_residuo}<br>
+                    <b>Nivel:</b> ${zona.nivel_contaminacion || 'N/A'}<br>
+                    <hr>
+                    <b>Reportes:</b><br>
+                `;
+
+                if (zona.reportes.length === 0) {
+                    popup += 'Sin reportes';
+                } else {
+                    zona.reportes.forEach(r => {
+                        popup += `• ${r.observaciones || 'Sin observación'}<br>`;
+                    });
+                }
+
+                L.marker([zona.latitud, zona.longitud])
+                    .addTo(map)
+                    .bindPopup(popup);
+            });
+        });
+</script>
+
+{% endblock %}

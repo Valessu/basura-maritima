@@ -1,0 +1,148 @@
+{% load static %}
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Zonas - Basura Marítima</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <style>
+        body {
+            background: linear-gradient(to bottom, #00395d, #0077a5);
+            color: #00395d;
+        }
+
+        .navbar {
+            background-color: #00395d !important;
+        }
+
+        .navbar-brand, .nav-link {
+            color: #fff !important;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            color: #90e0ef !important;
+        }
+
+        .content-box {
+            background: #ffffff;
+            color: #00395d;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0px 4px 12px rgba(0,0,0,0.2);
+        }
+
+        h1, h2 {
+            color: #00395d;
+            font-weight: 700;
+        }
+
+        .btn-primary, .btn-success {
+            border: none;
+        }
+
+        .btn-primary:hover, .btn-success:hover {
+            opacity: 0.9;
+        }
+
+        .btn-logout {
+            background-color: #ff6b6b;
+            border: none;
+        }
+
+        .btn-logout:hover {
+            background-color: #cc5656;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo-container img {
+            max-height: 120px;
+        }
+
+        .table thead {
+            background-color: #90e0ef;
+        }
+    </style>
+</head>
+<body>
+
+<!-- LOGO CENTRADO -->
+<div class="logo-container">
+    <img src="{% static 'Localizador/logo.png' %}" alt="Logo Basura Marítima">
+    <h1>Basura Marítima</h1>
+</div>
+
+<!-- NAV -->
+<nav class="navbar navbar-expand-lg mb-4">
+    <div class="container">
+        <ul class="navbar-nav mx-auto">
+            <li class="nav-item"><a class="nav-link" href="{% url 'listar_reportes' %}">Reportes</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'listar_usuarios' %}">Usuarios</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'listar_zonas' %}">Zonas</a></li>
+        </ul>
+        <a href="{% url 'login' %}" class="btn btn-logout">
+            <i class="bi bi-box-arrow-right"></i> Cambiar Usuario
+        </a>
+    </div>
+</nav>
+
+<!-- CONTENIDO -->
+<div class="container content-box">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="bi bi-geo-alt-fill"></i> Zonas de Basura</h2>
+        <a href="{% url 'agregar_zona' %}" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Agregar Zona
+        </a>
+    </div>
+
+    <div class="table-responsive shadow-sm rounded">
+        <table class="table table-hover align-middle bg-light mb-0">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Fecha Registro</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for zona in zonas %}
+                <tr>
+                    <td>{{ zona.zona_id }}</td>
+                    <td>{{ zona.nombre }}</td>
+                    <td>{{ zona.descripcion }}</td>
+                    <td>{{ zona.fecha_registro }}</td>
+                    <td>
+                        <a href="{% url 'editar_zona' zona.zona_id %}" class="btn btn-warning btn-sm me-1">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                        <a href="{% url 'eliminar_zona' zona.zona_id %}" class="btn btn-danger btn-sm">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center text-muted">No hay zonas registradas</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

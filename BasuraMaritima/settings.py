@@ -5,9 +5,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-nfgx8dh)wv4r6^w&s4ypnz9s4-dsy3si--uzbn5&xoql9#y0ge'
 
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 LOGIN_REDIRECT_URL = '/'
@@ -87,6 +87,7 @@ STATICFILES_DIRS = [
     BASE_DIR / "Localizador" / "static",
 ]
 
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 
 STATICFILES_DIRS = [

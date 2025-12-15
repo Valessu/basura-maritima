@@ -7,7 +7,9 @@ SECRET_KEY = 'django-insecure-nfgx8dh)wv4r6^w&s4ypnz9s4-dsy3si--uzbn5&xoql9#y0ge
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [    "basura-maritima.onrender.com",
+    "localhost",
+    "127.0.0.1"]
 
 
 LOGIN_REDIRECT_URL = '/'
@@ -45,7 +47,7 @@ AUTHENTICATION_BACKENDS = [
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],  # opcional
+        'DIRS': [BASE_DIR / 'templates'],  
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
